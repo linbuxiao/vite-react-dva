@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { increment, incrementAsync } from './reducer/counterSlice'
+import { increment, incrementAsync, getPost, errGet } from './reducer/counterSlice'
 import './App.css'
 
 function App() {
@@ -17,6 +17,8 @@ function App() {
       </div>
       {/* fake中也具有increment方法，但不会影响 */}
       <div>同名混淆: {state.fake}</div>
+      <div onClick={() => dispatch(getPost(1))}>AsyncThuck</div>
+      <div onClick={() => dispatch(errGet(1))}>AsyncThuck错误捕获</div>
     </div>
   )
 }

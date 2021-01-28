@@ -1,7 +1,35 @@
 import {  createSlice, 
-          createAction  } from '@reduxjs/toolkit'
+          createAsyncThunk  } from '@reduxjs/toolkit'
+import axios from 'axios';
 
+export const getPost = createAsyncThunk(
+  'users/getPost',
+  async (param, thunkAPI) => {
+    try {
+      const response = await axios.get('http://jsonplaceholder.typicode.com/posts')
+      thunkAPI.dispatch(incrementByAmount(param));
+      return response.data
+    }
+    catch(err) {
+      return thunkAPI.rejectWithValue('哦豁不知道怎么回事反正就是跑不通了')
+    }
 
+  }
+)
+
+export const errGet = createAsyncThunk(
+  'users/errGet',
+  async(param, thunkAPI) => {
+    try {
+      const response = await axios.get('http://jsonplaceholder.typicode.com/postss')
+      thunkAPI.dispatch(incrementByAmount(param));
+      return response.data
+    }
+    catch(err) {
+      return thunkAPI.rejectWithValue('哦豁不知道怎么回事反正就是跑不通了')
+    }    
+  }
+)
 
 const counterSlice = createSlice({
   name: 'counter',
@@ -12,6 +40,25 @@ const counterSlice = createSlice({
     incrementByAmount: (state,action) => {
       return (state + action.payload)
     }
+  },
+  extraReducers: {
+    [getPost.fulfilled]: (state, action) => {
+
+      console.log('fulfilled');
+      return state
+    },
+    [getPost.rejected]: (state, action) => {
+      console.log(action.payload);
+      return state
+    },
+    [getPost.pending]: (state, action) => {
+      console.log('pending');
+      return state
+    },
+    [errGet.rejected]: (state, action) => {
+      console.log(action.payload);
+      return state
+    },  
   }
 })
 export const { increment, decrement , incrementByAmount } = counterSlice.actions;
@@ -21,6 +68,8 @@ export const incrementAsync = amount => dispatch => {
     dispatch(incrementByAmount(amount));
   }, 1000);
 };
+
+
 
 
 
